@@ -1,9 +1,9 @@
 # hybrid-vigor
 Hybrid Vigor by Harm van den Dorpel, 2017
 
-hybridvigor.jpg
 
-[screenshot]: http://hybrid.vigor.bio/ "screenshot"
+![screenshot](hybridvigor.jpg)
+http://hybrid.vigor.bio/
 
 
 
