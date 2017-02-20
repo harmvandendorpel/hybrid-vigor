@@ -1,0 +1,38 @@
+{
+  "extends": "airbnb/base",
+  "rules": {
+    "no-underscore-dangle": 0,
+    "no-mixed-operators": 0,
+    "no-case-declarations": 0,
+    "no-bitwise": 0,
+    "comma-dangle": [
+      2,
+      "never"
+    ],
+    "prefer-default-export": 0,
+    "guard-for-in": 0,
+    "func-names": 0,
+    "no-plusplus": 0,
+    "eqeqeq": [
+      2,
+      "allow-null"
+    ],
+    "arrow-body-style": [
+      2,
+      "as-needed"
+    ],
+    "no-param-reassign": [
+      2,
+      {
+        "props": false
+      }
+    ],
+    "indent": [2, 2, {"SwitchCase": 1}],
+    "consistent-return": 0
+  },
+  "globals": {
+    "document": true,
+    "window": true,
+    "requestAnimationFrame": true
+  }
+}
