@@ -33,9 +33,7 @@ function randomColor({ brightness }) {
   const maxValue = 256 * 256 - 1;
   return fill(3, () => Math.min(
     maxValue,
-    parseInt(
-      random(0, maxValue) * brightness, 10
-    )
+    parseInt(random(0, maxValue) * brightness, 10)
   ));
 }
 
@@ -115,8 +113,8 @@ export default function imagineDrawing(settings) {
   const palette = createRandomPalette(settings);
   const zoomVariance = random(255);
   return {
-    shapes: [...Array(shapesInDrawing)].map(
-      () => createRandomLineSettings({ palette, settings, zoomVariance })
-    )
+    shapes: [...Array(shapesInDrawing)].map(() => createRandomLineSettings({
+      palette, settings, zoomVariance
+    }))
   };
 }

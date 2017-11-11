@@ -12,9 +12,10 @@ import {
 
 import imagineDrawing from './imagine-drawing';
 import SchemaDrawing from './schema-drawing';
+
 const schemaDrawing = schema(SchemaDrawing);
 
-function createCreatureFromGenotype(genotype) {
+export function createCreatureFromGenotype(genotype) {
   return {
     genotype,
     phenotype: {
@@ -25,10 +26,8 @@ function createCreatureFromGenotype(genotype) {
   };
 }
 
-function randomGenotype() {
-  const lineWidth = Math.round(
-    (Math.random() * 6) + 1
-  );
+export function randomGenotype() {
+  const lineWidth = Math.round((Math.random() * 6) + 1);
   const result = imagineDrawing({
     bw: false,
     linesOnly: false,
@@ -76,25 +75,6 @@ export function mutateGenotype({ genotype, frozen }) {
 export function generateGenotype(parentBitStreams) {
   const newChromosome = combineChromosomes(parentBitStreams, CHROMOSOME_LENGTH);
   return bitStreamToObject(newChromosome, SchemaDrawing);
-}
-
-export function generateAllRandomCreatures({ loadedCreatures, offspringMatrix }) {
-  const creatures = [];
-  const storedCreatures = cloneDeep(loadedCreatures);
-
-  for (let y = 0; y < offspringMatrix[1]; y++) {
-    for (let x = 0; x < offspringMatrix[0]; x++) {
-      let newGenotype = null;
-      if (storedCreatures.length > 0) {
-        newGenotype = storedCreatures.pop();
-      } else {
-        newGenotype = randomGenotype();
-      }
-      creatures.push(createCreatureFromGenotype(newGenotype));
-    }
-  }
-
-  return shuffle(creatures);
 }
 
 export function initIndexChildren({ state }) {

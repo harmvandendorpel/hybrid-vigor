@@ -144,8 +144,8 @@ const SchemaDrawing = {
   properties: {
     shapes: {
       type: 'array',
-      minItems: 18,
-      maxItems: 18,
+      minItems: 24,
+      maxItems: 24,
       required: true,
       items: SchemaShape
     }
