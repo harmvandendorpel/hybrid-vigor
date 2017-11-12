@@ -89,7 +89,8 @@ function render() {
   drawer.clear();
 
   drawSingleCreatureLarge({ creature: state.creature });
-  requestAnimationFrame(render);
+  //requestAnimationFrame(render);
+  setTimeout(render, 100);
 }
 
 function onResize() {
