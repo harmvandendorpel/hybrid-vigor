@@ -60,7 +60,7 @@ const SchemaGradient = {
   }
 };
 
-const angleCount = 256;
+const angleCount = 128;
 const SchemaShape = {
   type: 'object',
   additionalProperties: false,
@@ -144,8 +144,8 @@ const SchemaDrawing = {
   properties: {
     shapes: {
       type: 'array',
-      minItems: 24,
-      maxItems: 24,
+      minItems: 12,
+      maxItems: 12,
       required: true,
       items: SchemaShape
     }

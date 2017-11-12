@@ -85,23 +85,14 @@ function transitionTo(target, current) {
   return processNode(target, current);
 }
 
-function renderSingle() {
-  drawSingleCreatureLarge({ creature: state.creature });
-}
-
 function render() {
   drawer.clear();
 
-  renderSingle();
+  drawSingleCreatureLarge({ creature: state.creature });
   requestAnimationFrame(render);
 }
 
 function onResize() {
-}
-
-function run() {
-  drawer = createDrawer({ canvas });
-  render();
 }
 
 function main() {
@@ -113,7 +104,8 @@ function main() {
   initViewport({ canvas });
 
   $(window).bind('resize', onResize);
-  run();
+  drawer = createDrawer({ canvas });
+  render();
 }
 
 main();
