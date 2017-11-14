@@ -104,13 +104,19 @@ export default function createDrawer({ canvas }) {
   }
 
   function calculateShape({
-    dimensions, startAngle, angles, position, scale, translate
+    dimensions,
+    startAngle,
+    angles,
+    position,
+    scale,
+    translate,
   }) {
     let angle = startAngle;
 
     const inflatedAngles = [];
+
     for (let i = 0; i < angles.length; i++) {
-      let result = angles[i];
+      let result = angles[i].angle;
       result /= 511;
       result *= 16 + 15;
       result -= 16;
@@ -141,7 +147,7 @@ export default function createDrawer({ canvas }) {
   }
 
   function colorString(color) {
-    const normalized = color.slice(0).map(part => part / (255 * 255));
+    const normalized = color.slice(0).map(part => part / (255));
     const [h, s, l] = normalized;
     const [r, g, b] = hslToRgb(h, s, l);
     return `rgb(${parseInt(r, 10)},${parseInt(g, 10)},${parseInt(b, 10)})`;
@@ -207,7 +213,9 @@ export default function createDrawer({ canvas }) {
     solid,
     dotted,
     gradient,
-    isTransparent
+    isTransparent,
+    expressive,
+    damping
   }, dimensions, translate) {
     if (!enabled) return;
 
@@ -217,7 +225,9 @@ export default function createDrawer({ canvas }) {
       startAngle,
       angles,
       position,
-      scale
+      scale,
+      expressive,
+      damping
     });
 
     context.globalCompositeOperation = BLENDING_MODES[blendingMode];
@@ -262,17 +272,15 @@ export default function createDrawer({ canvas }) {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  function draw({ drawing, dimensions, translate }) {
-    if (!drawing.phenotype.visible) return;
-    const genotype = drawing.genotype;
+  function draw({ fenotype, dimensions, translate }) {
     startPos = [0, 0];
     pos = [0, 0];
 
-    for (let i = 0; i < genotype.shapes.length; i++) {
-      const shapeData = genotype.shapes[i];
+    for (let i = 0; i < fenotype.shapes.length; i++) {
+      const shapeData = fenotype.shapes[i];
       shape(shapeData, dimensions, translate);
     }
   }
 
-  return { shape, clear, draw };
+  return { clear, draw };
 }

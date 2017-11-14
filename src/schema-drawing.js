@@ -1,22 +1,19 @@
-const ColorSchema = {
-  type: 'array',
-  required: true,
-  items: {
-    type: 'integer',
-    required: true,
-    minimum: 0,
-    maximum: 256 * 256 - 1
-  },
-  minItems: 3,
-  maxItems: 3
-};
-
-const FractionSchema = {
+const ByteSchema = {
   type: 'integer',
   required: true,
   minimum: 0,
   maximum: 255
 };
+
+const ColorSchema = {
+  type: 'array',
+  required: true,
+  items: ByteSchema,
+  minItems: 3,
+  maxItems: 3
+};
+
+const FractionSchema = ByteSchema;
 
 const RequiredBool = {
   type: 'boolean',
@@ -60,8 +57,24 @@ const SchemaGradient = {
   }
 };
 
-const angleCount = 128;
-const SchemaShape = {
+const angleCount = 256;
+
+export const AngleSchema = {
+  angle: {
+    type: 'integer',
+    required: true,
+    minimum: 0,
+    maximum: 511
+  },
+  delta: {
+    type: 'integer',
+    required: true,
+    minimum: 0,
+    maximum: 511
+  }
+};
+
+export const SchemaShape = {
   type: 'object',
   additionalProperties: false,
   properties: {
@@ -71,23 +84,12 @@ const SchemaShape = {
       minItems: angleCount,
       maxItems: angleCount,
       items: {
-        type: 'integer',
-        minimum: 0,
-        maximum: 512 - 1
+        type: 'object',
+        required: true,
+        properties: AngleSchema
       }
     },
-    // activeAngles: {
-    //   type: 'integer',
-    //   required: true,
-    //   minimum: 0,
-    //   maximum: angleCount - 1
-    // },
-    scale: {
-      type: 'integer',
-      required: true,
-      minimum: 0,
-      maximum: 255
-    },
+    scale: ByteSchema,
     position: {
       type: 'array',
       items: FractionSchema,
@@ -100,11 +102,7 @@ const SchemaShape = {
       maximum: 7
     },
     isTransparent: RequiredBool,
-    opacity: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 255
-    },
+    opacity: ByteSchema,
     colorCycleSteps: {
       type: 'integer',
       required: true,
@@ -117,12 +115,7 @@ const SchemaShape = {
       minimum: 0,
       maximum: 31
     },
-    startAngle: {
-      type: 'integer',
-      required: true,
-      minimum: 0,
-      maximum: 255
-    },
+    startAngle: ByteSchema,
     color: ColorSchema,
     dotted: RequiredBool,
     solid: RequiredBool,
@@ -137,19 +130,17 @@ const SchemaShape = {
   }
 };
 
-const SchemaDrawing = {
+export const SchemaDrawing = {
   type: 'object',
   required: true,
   additionalProperties: false,
   properties: {
     shapes: {
       type: 'array',
-      minItems: 12,
-      maxItems: 12,
+      minItems: 32,
+      maxItems: 32,
       required: true,
       items: SchemaShape
     }
   }
 };
-
-export default SchemaDrawing;

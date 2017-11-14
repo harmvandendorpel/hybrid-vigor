@@ -1,14 +1,14 @@
 import { min, max, map, sample, random } from 'lodash';
-import SchemaDrawing from './schema-drawing';
-import { BLENDING_MODES, GRADIENT_KINDS } from './shared';
+import { SchemaDrawing, SchemaShape } from './schema-drawing';
+import { GRADIENT_KINDS } from './shared';
 
 const shapesInDrawing = SchemaDrawing.properties.shapes.minItems;
 
-function randomAngleList({ damping, count, roundness }) {
+function randomAngleList({ damping, count }) {
   let d = 0;
 
   return map(new Array(count), () => {
-    d += (random(true) - 0.5) / roundness;
+    d += (random(true) - 0.5) * 2;
     d *= damping;
 
     d = min([d, 15]);
@@ -30,7 +30,7 @@ function fill(count, callback) {
 }
 
 function randomColor({ brightness }) {
-  const maxValue = 256 * 256 - 1;
+  const maxValue = 255;
   return fill(3, () => Math.min(
     maxValue,
     parseInt(random(0, maxValue) * brightness, 10)
@@ -77,26 +77,26 @@ function createRandomLineSettings({ palette, settings, zoomVariance }) {
     random(SchemaDrawing.properties.shapes.items.properties.lineWidth.maximum, true);
 
   const maxAngles = SchemaDrawing.properties.shapes.items.properties.angles.minItems;
+  const damping = random(true);
   const angles = randomAngleList({
-    damping: random(true) * 1.25,
-    count: maxAngles,
-    roundness: random(1, 5)
+    damping,
+    count: maxAngles
   });
 
-  const normalizedAngles = angles.map(angle => parseInt((angle + 16) / (16 + 15) * 511, 10));
-
-  // const activeAngles = random(maxAngles - 5) + 3;
+  const normalizedAngles = angles.map(angle => ({
+    angle: parseInt((angle + 16) / (31) * 511, 10),
+    delta: 0
+  }));
 
   const color = sample(palette);
 
   return {
     angles: normalizedAngles,
-    // activeAngles,
     scale: random(zoomVariance), // random(255),
     opacity: random(255),
     isTransparent: !!random(),
     position: fill(2, randomByte),
-    blendingMode: random(BLENDING_MODES.length - 1),
+    blendingMode: random(SchemaShape.properties.blendingMode.maximum),
     colorCycleSteps: threshold(0.9, random(31), 0),
     colorCycleStartPos: 0,
     startAngle: random(255),

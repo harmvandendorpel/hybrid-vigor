@@ -15,7 +15,7 @@
   "scripts": {
     "test:lint": "eslint src test",
     "build": "browserify src/index.js -t [ babelify ] | uglifyjs > app.bundle.js -v",
-    "start:dev": "webpack-dev-server"
+    "start": "webpack-dev-server"
   },
   "private": true,
   "author": "Harm van den Dorpel",
