@@ -46,23 +46,8 @@ function drawCreature({ creature, offset, dimensions }) {
 }
 
 function drawSingleCreatureLarge(creature) {
-  const portrait = canvas.height > canvas.width;
-  const dimensions = portrait ?
-    [
-      canvas.width, canvas.width / 0.8
-    ] :
-    [
-      canvas.height * 0.8, canvas.height
-    ];
-
-  const offset = portrait ?
-    [
-      0, (canvas.height - canvas.width / 0.8) / 2
-    ]
-    :
-    [
-      (canvas.width - canvas.height * 0.8) / 2, 0
-    ];
+  const dimensions = [canvas.width, canvas.height];
+  const offset = [0, 0]
 
   drawCreature({
     creature,
@@ -138,6 +123,12 @@ function render() {
   drawer.clear();
 
   // state.transition = transitionTo(state.creature.fenotype, state.transition);
+  state.creature.shapes.forEach((shape) => {
+    shape.startAngle += 0.0002;
+    if (shape.startAngle > 255) {
+      shape.startAngle = 0;
+    }
+  });
   drawSingleCreatureLarge(state.creature);
   requestAnimationFrame(render);
 }

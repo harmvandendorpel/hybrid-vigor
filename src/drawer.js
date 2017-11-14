@@ -109,7 +109,7 @@ export default function createDrawer({ canvas }) {
     angles,
     position,
     scale,
-    translate,
+    translate
   }) {
     let angle = startAngle;
 
@@ -214,8 +214,6 @@ export default function createDrawer({ canvas }) {
     dotted,
     gradient,
     isTransparent,
-    expressive,
-    damping
   }, dimensions, translate) {
     if (!enabled) return;
 
@@ -226,8 +224,6 @@ export default function createDrawer({ canvas }) {
       angles,
       position,
       scale,
-      expressive,
-      damping
     });
 
     context.globalCompositeOperation = BLENDING_MODES[blendingMode];
@@ -277,8 +273,7 @@ export default function createDrawer({ canvas }) {
     pos = [0, 0];
 
     for (let i = 0; i < fenotype.shapes.length; i++) {
-      const shapeData = fenotype.shapes[i];
-      shape(shapeData, dimensions, translate);
+      shape(fenotype.shapes[i], dimensions, translate);
     }
   }
 

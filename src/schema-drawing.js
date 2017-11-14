@@ -137,8 +137,8 @@ export const SchemaDrawing = {
   properties: {
     shapes: {
       type: 'array',
-      minItems: 32,
-      maxItems: 32,
+      minItems: 36,
+      maxItems: 36,
       required: true,
       items: SchemaShape
     }

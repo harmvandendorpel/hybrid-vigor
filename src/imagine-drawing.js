@@ -8,7 +8,7 @@ function randomAngleList({ damping, count }) {
   let d = 0;
 
   return map(new Array(count), () => {
-    d += (random(true) - 0.5) * 2;
+    d += (random(true) - 0.5);
     d *= damping;
 
     d = min([d, 15]);
@@ -57,7 +57,7 @@ function createRandomPalette(settings) {
     return [[0, 0, 0]];
   }
   const brightness = random(true) * 2 + 0.5;
-  const paletteSize = random(1, 7);
+  const paletteSize = random(2, 7);
   const colors = [...Array(paletteSize)].map(() => randomColor({ brightness }));
 
   return colors.sort((a, b) => {
