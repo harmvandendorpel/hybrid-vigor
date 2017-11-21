@@ -107,7 +107,7 @@ function createRandomLineSettings({ palette, settings }) {
     dotted,
     lineWidth: settings.lineWidth || lineWidth,
     gradient: createGradient({ palette }),
-    enabled: settings.enabled || !!random()
+    enabled: true // settings.enabled || !!random()
   };
 }
 
