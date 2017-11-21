@@ -116,11 +116,13 @@ export default function createDrawer({ canvas }) {
     const inflatedAngles = [];
 
     for (let i = 0; i < angles.length; i++) {
-      let result = angles[i].angle;
+      const a = angles[i];
+      let result = a.angle;
       result /= 511;
       result *= 16 + 15;
       result -= 16;
-      inflatedAngles.push(result);
+
+      inflatedAngles.push(result + a.bend / 3);
     }
 
     const sum = reduce(inflatedAngles, (a, b) => a + b, 0);
@@ -198,24 +200,25 @@ export default function createDrawer({ canvas }) {
     return result;
   }
 
-  function shape({
-    enabled,
-    lineWidth,
-    blendingMode,
-    opacity,
-    colorCycleSteps,
-    colorCycleStartPos,
-    startAngle,
-    angles,
-    position,
-    scale,
-    color,
-    solid,
-    dotted,
-    gradient,
-    isTransparent,
-  }, dimensions, translate) {
-    if (!enabled) return;
+  function shape(shapeSettings, dimensions, translate) {
+    if (!shapeSettings.enabled) return;
+
+    const {
+      lineWidth,
+      blendingMode,
+      opacity,
+      colorCycleSteps,
+      colorCycleStartPos,
+      startAngle,
+      angles,
+      position,
+      scale,
+      color,
+      solid,
+      dotted,
+      gradient,
+      isTransparent
+    } = shapeSettings;
 
     const coordinates = calculateShape({
       dimensions,
@@ -232,10 +235,11 @@ export default function createDrawer({ canvas }) {
     startWalk();
     context.lineWidth = lineWidth / 2;
     let colorCycle = colorCycleStartPos;
+    const halfWay = colorCycleSteps / 2;
 
     for (let i = 0; i < coordinates.length; i++) {
       const coordinate = coordinates[i];
-      if (colorCycle > colorCycleSteps / 2 && dotted) {
+      if (colorCycle > halfWay && dotted) {
         moveTo(coordinate);
       } else {
         lineTo(coordinate);
@@ -268,14 +272,18 @@ export default function createDrawer({ canvas }) {
     context.clearRect(0, 0, canvas.width, canvas.height);
   }
 
-  function draw({ fenotype, dimensions, translate }) {
+  function reset() {
     startPos = [0, 0];
     pos = [0, 0];
+  }
+
+  function draw({ fenotype, dimensions, translate }) {
+    reset();
 
     for (let i = 0; i < fenotype.shapes.length; i++) {
       shape(fenotype.shapes[i], dimensions, translate);
     }
   }
 
-  return { clear, draw };
+  return { reset, clear, draw, shape };
 }

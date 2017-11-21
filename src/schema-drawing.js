@@ -1,3 +1,10 @@
+const angleCount = 256;
+const maxInteger = maximum => ({
+  type: 'integer',
+  minimum: 0,
+  maximum
+});
+
 const ByteSchema = {
   type: 'integer',
   required: true,
@@ -5,13 +12,15 @@ const ByteSchema = {
   maximum: 255
 };
 
-const ColorSchema = {
+const fixedLengthArray = (count, items) => ({
   type: 'array',
+  minItems: count,
+  maxItems: count,
   required: true,
-  items: ByteSchema,
-  minItems: 3,
-  maxItems: 3
-};
+  items
+});
+
+const ColorSchema = fixedLengthArray(3, ByteSchema);
 
 const FractionSchema = ByteSchema;
 
@@ -26,105 +35,47 @@ const SchemaGradient = {
   required: true,
   properties: {
     enabled: RequiredBool,
-    kind: {
-      required: true,
-      type: 'integer',
-      minimum: 0,
-      maximum: 1
-      // enum: ['linear', 'radial']
-    },
-    stops: {
-      type: 'array',
-      minItems: 2,
-      maxItems: 2,
-      required: true,
-      items: {
-        type: 'object',
-        additionalProperties: false,
-        properties: {
-          color: ColorSchema,
-          position: FractionSchema
-        }
+    kind: maxInteger(1),
+    stops: fixedLengthArray(2, {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        color: ColorSchema,
+        position: FractionSchema
       }
-    },
-    position: {
-      type: 'array',
-      minItems: 6,
-      maxItems: 6,
-      items: FractionSchema,
-      required: true
-    }
+    }),
+    position: fixedLengthArray(6, FractionSchema)
   }
 };
 
-const angleCount = 256;
-
 export const AngleSchema = {
-  angle: {
-    type: 'integer',
-    required: true,
-    minimum: 0,
-    maximum: 511
-  },
-  delta: {
-    type: 'integer',
-    required: true,
-    minimum: 0,
-    maximum: 511
-  }
+  angle: maxInteger(511),
+  bend: maxInteger(511),
+  bendDelta: maxInteger(511)
 };
 
 export const SchemaShape = {
   type: 'object',
   additionalProperties: false,
   properties: {
-    angles: {
-      type: 'array',
+    angles: fixedLengthArray(angleCount, {
+      type: 'object',
       required: true,
-      minItems: angleCount,
-      maxItems: angleCount,
-      items: {
-        type: 'object',
-        required: true,
-        properties: AngleSchema
-      }
-    },
+      properties: AngleSchema
+    }),
     scale: ByteSchema,
-    position: {
-      type: 'array',
-      items: FractionSchema,
-      minItems: 2,
-      maxItems: 2
-    },
-    blendingMode: {
-      type: 'integer',
-      minimum: 0,
-      maximum: 7
-    },
+    position: fixedLengthArray(2, FractionSchema),
+    blendingMode: maxInteger(7),
     isTransparent: RequiredBool,
     opacity: ByteSchema,
-    colorCycleSteps: {
-      type: 'integer',
-      required: true,
-      minimum: 0,
-      maximum: 31
-    },
-    colorCycleStartPos: {
-      type: 'integer',
-      required: true,
-      minimum: 0,
-      maximum: 31
-    },
+    colorCycleSteps: maxInteger(31),
+    colorCycleStartPos: maxInteger(31),
+    colorCycleIncrement: maxInteger(31),
     startAngle: ByteSchema,
     color: ColorSchema,
     dotted: RequiredBool,
     solid: RequiredBool,
-    lineWidth: {
-      type: 'integer',
-      required: true,
-      minimum: 0,
-      maximum: 7
-    },
+    lineWidth: maxInteger(7),
     enabled: RequiredBool,
     gradient: SchemaGradient
   }
@@ -135,12 +86,7 @@ export const SchemaDrawing = {
   required: true,
   additionalProperties: false,
   properties: {
-    shapes: {
-      type: 'array',
-      minItems: 36,
-      maxItems: 36,
-      required: true,
-      items: SchemaShape
-    }
+    shapes: fixedLengthArray(24, SchemaShape),
+    boids: fixedLengthArray(1, SchemaShape)
   }
 };
